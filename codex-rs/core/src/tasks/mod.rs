@@ -1,5 +1,6 @@
 mod compact;
 mod lifecycle;
+pub(crate) mod maf;
 mod regular;
 mod review;
 mod user_shell;
@@ -365,15 +366,22 @@ impl Session {
         let storage_originator = AuthStorageOriginator::from_client_name(&turn_context.originator);
         let task_future = async move {
             let ctx_for_finish = Arc::clone(&ctx);
-            let task_result = task_for_run
-                .run(
-                    Arc::clone(&session),
-                    ctx,
-                    task_input,
+            let task_result = if maf::enabled(&session).await {
+                maf::run(
+                    Arc::clone(&session), ctx, task_input, task_kind,
                     task_cancellation_token.child_token(),
-                )
-                .instrument(trace_span!("session_task.run"))
-                .await;
+                ).await
+            } else {
+                task_for_run
+                    .run(
+                        Arc::clone(&session),
+                        ctx,
+                        task_input,
+                        task_cancellation_token.child_token(),
+                    )
+                    .instrument(trace_span!("session_task.run"))
+                    .await
+            };
             let sess = Arc::clone(&session);
             // Private reviewers save their transcript together with the terminal event.
             // Errors and cancellation retain their existing save path.

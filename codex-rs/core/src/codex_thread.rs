@@ -576,6 +576,21 @@ impl CodexThread {
         request: impl Into<WithTurnExtensionData<TurnInputRequest>>,
         mode: TurnInputMode,
     ) -> CodexResult<TurnInputSubmission> {
+        let mode = if crate::tasks::maf::enabled(&self.session).await {
+            match mode {
+                TurnInputMode::StartOrSteer | TurnInputMode::StartIfIdle => {
+                    TurnInputMode::StartIfIdle
+                }
+                _ => {
+                    return Err(std::io::Error::other(
+                        "MAF steering and internal continuations are not supported",
+                    )
+                    .into());
+                }
+            }
+        } else {
+            mode
+        };
         if !matches!(mode, TurnInputMode::Steer { .. }) {
             self.ensure_execution_capacity_for_turn_start(
                 self.session.services.agent_control.as_ref(),

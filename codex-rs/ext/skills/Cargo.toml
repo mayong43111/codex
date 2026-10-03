@@ -33,7 +33,7 @@ schemars = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
 serde_yaml = { workspace = true }
-tokio = { workspace = true, features = ["rt", "sync", "time"] }
+tokio = { workspace = true, features = ["io-util", "process", "rt", "sync", "time"] }
 toml = { workspace = true }
 tracing = { workspace = true }
 
@@ -46,5 +46,5 @@ insta = { workspace = true }
 opentelemetry_sdk = { workspace = true }
 pretty_assertions = { workspace = true }
 tempfile = { workspace = true }
-tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+tokio = { workspace = true, features = ["io-util", "macros", "process", "rt-multi-thread"] }
 tracing-subscriber = { workspace = true }

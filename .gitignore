@@ -14,6 +14,8 @@ user.bazelrc
 build/
 out/
 storybook-static/
+codex-dotnet/**/bin/
+codex-dotnet/**/obj/
 
 # ignore README for publishing
 codex-cli/README.md

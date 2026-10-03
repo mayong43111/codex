@@ -157,7 +157,7 @@ where
     parse_arguments(arguments)
 }
 
-fn resolve_tool_environment<'a>(
+pub(crate) fn resolve_tool_environment<'a>(
     environments: &'a TurnEnvironmentSnapshot,
     environment_id: Option<&str>,
 ) -> Result<Option<&'a TurnEnvironment>, FunctionCallError> {

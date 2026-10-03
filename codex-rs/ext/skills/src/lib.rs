@@ -13,6 +13,8 @@ mod host_service;
 mod host_snapshot;
 mod invocation;
 mod loader;
+pub mod maf;
+pub mod maf_runtime;
 pub mod provider;
 mod render;
 mod render_observability;

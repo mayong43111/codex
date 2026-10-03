@@ -68,6 +68,17 @@ pub struct Hooks {
 }
 
 impl Hooks {
+    pub fn has_tool_hooks(&self) -> bool {
+        self.engine.handlers.iter().any(|handler| {
+            matches!(
+                handler.event_name,
+                codex_protocol::protocol::HookEventName::PreToolUse
+                    | codex_protocol::protocol::HookEventName::PostToolUse
+                    | codex_protocol::protocol::HookEventName::PermissionRequest
+            )
+        })
+    }
+
     /// Bind this session's hook runtime and output files to its thread, rejecting unloadable
     /// required managed hooks.
     pub fn new(
